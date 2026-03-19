@@ -1,0 +1,196 @@
+/* --- Contêiner Principal --- */
+body.login-body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-page-container {
+    display: flex;
+    /* Removed comments */
+    max-width: 1000px;
+    min-height: 600px; /* Altura flexível para caber mais campos */
+    background-color: var(--bg-white);
+    border-radius: 15px;
+    overflow: hidden; /* Cortar as bordas da imagem */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Sombra elegante */
+}
+
+/* --- Painel Visual (Lado Esquerdo) --- */
+.login-visual-panel {
+    flex: 1; /* Ocupar metade do espaço */
+    position: relative;
+    background-image: url('https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=1200&q=80'); /* Imagem dos cupcakes da hero */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.visual-content {
+    position: relative;
+    z-index: 2; /* Ficar acima da overlay */
+    text-align: center;
+    color: #ffffff; /* Ajustado para branco puro */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Sombra para garantir visibilidade */
+}
+
+.visual-content .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.visual-content h1 {
+    font-family: 'Playfair Display', serif; /* Fonte elegante da hero */
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.visual-content p {
+    font-size: 0.95rem;
+    font-weight: 300;
+    opacity: 0.9;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Overlay escuro sutil */
+    z-index: 1;
+}
+
+/* --- Painel do Formulário (Lado Direito) --- */
+.login-form-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 350px; /* Formulário não muito largo */
+}
+
+.login-form-panel h2 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    color: var(--text-dark);
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.remember-me input {
+    margin-right: 8px;
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: var(--text-white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.login-btn:hover {
+    opacity: 0.9;
+}
+
+.footer-links {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.footer-links p {
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.back-to-shop {
+    display: inline-block;
+    color: var(--text-muted) !important;
+    font-weight: 400 !important;
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    .login-page-container {
+        flex-direction: column; /* Empilhar em telas pequenas */
+        height: auto;
+    }
+    
+    .login-visual-panel {
+        padding: 60px 20px;
+    }
+    
+    .login-form-panel {
+        padding: 40px 20px;
+    }
+}

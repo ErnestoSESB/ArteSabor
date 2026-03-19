@@ -1,0 +1,64 @@
+<div class="crm-grid" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+    <div class="card metric" style="background: white; border-radius: 8px; padding: 20px; min-height: 120px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+        <h4 style="margin: 0; color: #555; font-size: 16px;">Cliques na Vitrine (Total)</h4>
+        <p class="value" style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #b35d6e;">
+            {{ total_clicks|default:"0" }}
+        </p>
+    </div>
+    
+    <div class="card main-chart" style="background: white; border-radius: 8px; padding: 20px; grid-column: 1 / -1; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <h3 style="margin-top: 0; color: #333; margin-bottom: 30px;">Top Produtos Mais Clicados</h3>
+        <div class="bar-chart" style="display: flex; align-items: flex-end; gap: 20px; height: 250px; border-bottom: 2px solid #eee; padding-bottom: 10px; overflow-x: auto;">
+            {% for item in top_clicks %}
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex: 1; min-width: 60px;">
+                    <div style="position: relative; width: 40px; background-color: #b35d6e; border-radius: 4px 4px 0 0; 
+                        height: {% if total_clicks > 0 %}{% widthratio item.click_count total_clicks 100 %}{% else %}0{% endif %}%; min-height: 20px;" 
+                        title="{{ item.click_count }} cliques ({{ item.product__name }})">
+                        <span style="position: absolute; top: -25px; width: 100%; text-align: center; font-size: 14px; font-weight: bold; color: #555;">
+                            {{ item.click_count }}
+                        </span>
+                    </div>
+                    <span style="font-size: 12px; margin-top: 10px; color: #666; text-align: center; max-width: 80px; word-wrap: break-word; font-weight: 500;">
+                        {{ item.product__name }}
+                    </span>
+                </div>
+            {% empty %}
+                <div style="width: 100%; display: flex; align-items: center; justify-content: center; height: 100%; color: #999;">
+                    <p>Nenhum clique registrado ainda. Navegue pela vitrine para gerar dados!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="card main-chart" style="background: white; border-radius: 8px; padding: 20px; grid-column: 1 / -1; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <h3 style="margin-top: 0; color: #333; margin-bottom: 20px;">Quem clicou recentemente</h3>
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid #ddd; color: #666;">
+                    <th style="padding: 10px;">Produto</th>
+                    <th style="padding: 10px;">Usuário</th>
+                    <th style="padding: 10px;">Data / Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in recent_clicks %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px;">{{ log.product.name }}</td>
+                    <td style="padding: 10px;">
+                        {% if log.user %}
+                            {{ log.user.get_full_name|default:log.user.username }}
+                        {% else %}
+                            <i>Visitante (Anônimo)</i>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 10px; color: #888; font-size: 13px;">{{ log.created_at|date:"d/m/Y H:i:s" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="padding: 20px; text-align: center; color: #999;">Sem registros recentes.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

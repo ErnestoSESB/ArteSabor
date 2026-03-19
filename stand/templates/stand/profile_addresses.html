@@ -1,0 +1,217 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meus Endereços - Arte & Sabor</title>
+
+    <link rel="stylesheet" href="{% static 'css/stand/main.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/header.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/profile.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    {% include 'stand/header.html' %}
+
+    
+
+    <div class="perfil-container">
+
+        <aside class="perfil-sidebar">
+
+            <div class="user-avatar">
+
+                <div class="avatar-circle">
+
+                    {% if request.user.name %}{{ request.user.name|first|upper }}{% else %}{{ request.user.username|first|upper }}{% endif %}
+
+                </div>
+
+                <h3>{% if request.user.name %}{{ request.user.name }}{% else %}{{ request.user.username }}{% endif %}</h3>
+
+                <p>Cliente desde {{ request.user.date_joined|date:"M Y" }}</p>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="{% url 'stand:profile' %}">👤 Meus Dados</a>
+
+                <a href="{% url 'stand:profile_addresses' %}" class="active">📍 Endereços</a>
+
+                <hr>
+
+                <a href="{% url 'stand:logout' %}" class="logout-link">Sair</a>
+
+            </nav>
+
+        </aside>
+
+
+
+        <main class="perfil-content">
+
+            <section class="perfil-section">
+
+                <h2>Meus Endereços Cadastrados</h2>
+
+                
+
+                {% if messages %}
+
+                <div class="messages" style="margin-bottom: 20px;">
+
+                    {% for message in messages %}
+
+                        <div style="padding: 10px; border-radius: 5px; {% if message.tags == 'success' %}background-color: #d4edda; color: #3c763d; border: 1px solid #c3e6cb;{% else %}background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% endif %}">
+
+                            {{ message }}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+
+
+                <div class="enderecos-lista" style="margin-bottom: 30px;">
+
+                    {% if addresses %}
+
+                        {% for address in addresses %}
+
+                        <div class="endereco-card" style="border: 1px solid #efeae2; padding: 15px; border-radius: 8px; margin-bottom: 15px; background-color: #faf8f5;">
+
+                            <h4 style="color: #b35d6e; margin-bottom: 8px;">{{ address.street }}, {{ address.number }}</h4>
+
+                            <p style="color: #6d5b5b; font-size: 0.9em; margin-bottom: 4px;">{{ address.city }} - {{ address.state }}</p>
+
+                            <p style="color: #6d5b5b; font-size: 0.9em;">CEP: {{ address.zip_code }}</p>
+
+                            
+
+                            <form method="post" action="{% url 'stand:profile_addresses' %}" style="margin-top: 10px;">
+
+                                {% csrf_token %}
+
+                                <input type="hidden" name="action" value="delete">
+
+                                <input type="hidden" name="address_id" value="{{ address.id }}">
+
+                                <button type="submit" style="background: none; border: none; color: #d9534f; cursor: pointer; font-size: 0.85em; font-weight: 600; text-decoration: underline;">Remover Endereço</button>
+
+                            </form>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p style="color: #777;">Você ainda não possui endereços cadastrados.</p>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+
+            <section class="perfil-section">
+
+                <h2>Cadastrar Novo Endereço</h2>
+
+                <form method="post" action="{% url 'stand:profile_addresses' %}" class="perfil-form">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="action" value="create">
+
+                    
+
+                    <div class="form-row">
+
+                        <div class="form-group" style="flex: 2;">
+
+                            <label>Rua / Logradouro</label>
+
+                            <input type="text" name="street" placeholder="Ex: Rua das Flores" required>
+
+                        </div>
+
+                        <div class="form-group" style="flex: 1;">
+
+                            <label>Número</label>
+
+                            <input type="number" name="number" placeholder="Ex: 123" required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label>Cidade</label>
+
+                            <input type="text" name="city" placeholder="Ex: São Paulo" required>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Estado</label>
+
+                            <input type="text" name="state" placeholder="Ex: SP" required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group" style="max-width: 50%;">
+
+                            <label>CEP</label>
+
+                            <input type="text" name="zip_code" placeholder="Ex: 00000-000" required>
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="save-btn">Salvar Endereço</button>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,362 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Arte & Sabor</title>
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include 'ERP/admin_header.html' %}
+
+    <section class="admin-container">
+        <div class="admin-header">
+            <div>
+                <h2>Painel Administrativo</h2>
+                <p>Gerencie seus doces e categorias</p>
+            </div>
+            <div id="header-btn-doces">
+                <a href="{% url 'ERP:create_product' %}" class="add-new-btn" style="text-decoration: none;">+ Novo Doce</a>
+            </div>
+            <div id="header-btn-categorias" style="display:none;">
+                <a href="{% url 'ERP:create_category' %}" class="add-new-btn" style="text-decoration: none;">+ Nova Categoria</a>
+            </div>
+            <div id="header-btn-pedidos" style="display:none;">
+                <a href="{% url 'ERP:create_order' %}" class="add-new-btn" style="text-decoration: none;">+ Novo Pedido Manual</a>
+            </div>
+            <div id="header-btn-clientes" style="display:none;">
+                <span class="add-new-btn" style="cursor: default; opacity: 0.85;">Resumo automatico</span>
+            </div>
+            <div id="header-btn-pagamentos" style="display:none;">
+                <span class="add-new-btn" style="cursor: default; opacity: 0.85;">Log de pagamentos</span>
+            </div>
+            <div id="header-btn-receitas" style="display:none;">
+                <a href="{% url 'ERP:create_recipe' %}" class="add-new-btn" style="text-decoration: none;">+ Nova Receita</a>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="tab active" onclick="showTab('doces', this)">🧁 Doces ({{ doces.count }})</button>
+            <button class="tab" onclick="showTab('categorias', this)">🏷️ Categorias ({{ categories.count }})</button>
+            <button class="tab" onclick="showTab('pedidos', this)">📦 Pedidos ({{ orders.count }})</button>
+            <button class="tab" onclick="showTab('clientes', this)">👥 Clientes ({{ customers|length }})</button>
+            <button class="tab" onclick="showTab('pagamentos', this)">💳 Pagamentos ({{ payment_logs|length }})</button>
+            <button class="tab" onclick="showTab('financas', this)">💰 Finanças</button>
+            <button class="tab" onclick="showTab('receitas', this)">📖 Receitas ({{ recipes.count }})</button>
+                <div id="tab-financas" style="display:none;">
+                    <div class="finance-box-grid">
+                        <article class="finance-box-card">
+                            <h3>Caixa Total</h3>
+                            <div class="finance-value">R$ {{ finance_box.cash_total|floatformat:2 }}</div>
+                            <form method="post" action="{% url 'ERP:finance_add_cash' %}" style="display:inline-block;">
+                                {% csrf_token %}
+                                <input type="number" name="value" step="0.01" placeholder="Adicionar" required>
+                                <button type="submit">+</button>
+                            </form>
+                            <form method="post" action="{% url 'ERP:finance_remove_cash' %}" style="display:inline-block;">
+                                {% csrf_token %}
+                                <input type="number" name="value" step="0.01" placeholder="Diminuir" required>
+                                <button type="submit">-</button>
+                            </form>
+                        </article>
+                        <article class="finance-box-card">
+                            <h3>Empréstimo a Quitar</h3>
+                            <div class="finance-value">R$ {{ finance_box.loan_total|floatformat:2 }}</div>
+                            <form method="post" action="{% url 'ERP:finance_add_loan' %}" style="display:inline-block;">
+                                {% csrf_token %}
+                                <input type="number" name="value" step="0.01" placeholder="Adicionar" required>
+                                <button type="submit">+</button>
+                            </form>
+                            <form method="post" action="{% url 'ERP:finance_remove_loan' %}" style="display:inline-block;">
+                                {% csrf_token %}
+                                <input type="number" name="value" step="0.01" placeholder="Diminuir" required>
+                                <button type="submit">-</button>
+                            </form>
+                        </article>
+                    </div>
+                    <div class="finance-logs-section">
+                        <h4>Últimos logs de movimentação</h4>
+                        <ul class="finance-log-list">
+                            {% for log in finance_logs|slice:':5' %}
+                                <li>{{ log.created_at|date:'d/m/Y - H:i' }} - {{ log.action }}: R$ {{ log.value|floatformat:2 }} {{ log.description }}</li>
+                            {% empty %}
+                                <li><em>Sem movimentações recentes.</em></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="finance-pending-section">
+                        <h4>Pagamentos a Receber</h4>
+                        <ul class="finance-pending-list">
+                            {% for log in payment_logs %}
+                                {% if not log.is_paid %}
+                                    <li>#{{ log.order.id }} - {{ log.client_name }} - R$ {{ log.total|floatformat:2 }} - {{ log.event_date|date:'d/m/Y - H:i' }}</li>
+                                {% endif %}
+                            {% empty %}
+                                <li><em>Sem pagamentos pendentes.</em></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+        </div>
+        <div id="tab-doces">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Estoque</th>
+                        <th>Ativo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doce in doces %}
+                    <tr>
+                        <td>
+                            {% if doce.image %}
+                                <img src="{{ doce.image.url }}" class="thumb" alt="{{ doce.name }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/40" class="thumb" alt="Sem imagem">
+                            {% endif %}
+                        </td>
+                        <td>{{ doce.name }}</td>
+                        <td>
+                            {% if doce.category_link.category %}
+                                <span class="badge">{{ doce.category_link.category.name }}</span>
+                            {% else %}
+                                <span style="color:#aaa;">—</span>
+                            {% endif %}
+                        </td>
+                        <td>R$ {{ doce.price|floatformat:2 }}</td>
+                        <td>{{ doce.stock }}</td>
+                        <td>{% if doce.is_active %}✅{% else %}❌{% endif %}</td>
+                        <td class="actions">
+                            <a href="{% url 'ERP:editar_doce' doce.id %}" class="edit-btn">✏️</a>
+                            <a href="{% url 'ERP:excluir_doce' doce.id %}" class="delete-btn">🗑️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px;">Nenhum doce cadastrado no momento.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="tab-categorias" style="display:none;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.description|default:"-" }}</td>
+                        <td class="actions">
+                            <a href="{% url 'ERP:editar_categoria' category.id %}" class="edit-btn">✏️</a>
+                            <a href="{% url 'ERP:excluir_categoria' category.id %}" class="delete-btn">🗑️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 20px;">Nenhuma categoria cadastrada no momento.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-pedidos" style="display:none;">
+            <table class="admin-table" style="width: 100%; mt-4">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td style="font-weight: bold; color: var(--primary-color);">#{{ order.id|stringformat:"s"|slice:":8" }}</td>
+                        <td>{{ order.created_at|date:"d/m/Y - H:i" }}</td>
+                        <td>{{ order.client.username }}</td>
+                        <td>
+                            <span style="padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;
+                            {% if order.status == 'delivered' %}background: #d4edda; color: #155724;
+                            {% elif order.status == 'canceled' %}background: #f8d7da; color: #721c24;
+                            {% else %}background: #fff3cd; color: #856404;{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td style="font-weight: bold;">R$ {{ order.get_total|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px;">Nenhum pedido realizado ainda.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-clientes" style="display:none;">
+            {% if customers %}
+                <div class="clients-grid">
+                    {% for customer in customers %}
+                        <article class="client-summary-card">
+                            <h3 class="client-summary-title">{{ customer.display_name }}</h3>
+                            <p class="client-summary-subtitle">Ficha resumida do cliente</p>
+
+                            <div class="client-form-grid">
+                                <div class="client-field">
+                                    <label>Numero</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="text" value="{{ customer.number }}" readonly style="flex: 1; margin-bottom: 0;">
+                                        {% if customer.number and customer.number != 'Não informado' %}
+                                            <a href="https://wa.me/55{{ customer.number|cut:' '|cut:'-'|cut:'('|cut:')' }}" target="_blank" title="Chamar no WhatsApp" style="display: flex; align-items: center;">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.305-.885-.653-1.482-1.46-1.655-1.758-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.015c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+                                                </svg>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Email</label>
+                                    <input type="text" value="{{ customer.email }}" readonly>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Localização</label>
+                                    <input type="text" value="{{ customer.city }} - {{ customer.state }}" readonly>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Data de cadastro</label>
+                                    <input type="text" value="{% if customer.date_joined %}{{ customer.date_joined|date:'d/m/Y - H:i' }}{% else %}Nao informado{% endif %}" readonly>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Numero de pedidos realizados</label>
+                                    <input type="text" value="{{ customer.orders_count }}" readonly>
+                                </div>
+
+                                <div class="client-field client-field-full">
+                                    <label>Ultimo login</label>
+                                    <input type="text" value="{% if customer.last_login %}{{ customer.last_login|date:'d/m/Y - H:i' }}{% else %}Nunca acessou{% endif %}" readonly>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-customers">Nenhum cliente cadastrado no momento.</div>
+            {% endif %}
+        </div>
+
+        <div id="tab-pagamentos" style="display:none;">
+            <div class="payments-summary-grid">
+                <article class="payments-summary-card">
+                    <p class="payments-summary-label">Pagamentos realizados</p>
+                    <h3>{{ paid_payments_count }}</h3>
+                    <p>R$ {{ paid_total_value|floatformat:2 }}</p>
+                </article>
+                <article class="payments-summary-card pending">
+                    <p class="payments-summary-label">Pagamentos pendentes</p>
+                    <h3>{{ pending_payments_count }}</h3>
+                    <p>R$ {{ pending_total_value|floatformat:2 }}</p>
+                </article>
+            </div>
+
+            {% if payment_logs %}
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Cliente</th>
+                            <th>Email</th>
+                            <th>Total</th>
+                            <th>Status pagamento</th>
+                            <th>Data do log</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in payment_logs %}
+                            <tr>
+                                <td>#{{ item.order.id|stringformat:"s"|slice:":8" }}</td>
+                                <td>{{ item.client_name }}</td>
+                                <td>{{ item.client_email }}</td>
+                                <td>R$ {{ item.total|floatformat:2 }}</td>
+                                <td>
+                                    <span class="payment-badge {% if item.is_paid %}paid{% else %}pending{% endif %}">
+                                        {{ item.payment_label }}
+                                    </span>
+                                </td>
+                                <td>{{ item.event_date|date:"d/m/Y - H:i" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-customers">Nenhum pagamento encontrado para gerar log.</div>
+            {% endif %}
+        </div>
+
+    
+        <div id="tab-receitas" style="display:none;">
+            <table class="admin-table" style="mt-4">
+                <thead>
+                    <tr>
+                        <th>Receita</th>
+                        <th>Modo de Preparo</th>
+                        <th>Ingredientes</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipe in recipes %}
+                    <tr>
+                        <td><strong>{{ recipe.title }}</strong></td>
+                        <td>{{ recipe.instructions|truncatewords:20 }}</td>
+                        <td>
+                            <ul style="margin:0; padding-left:20px;">
+                                {% for ing in recipe.ingredients.all %}
+                                    <li>{{ ing.quantity }} - {{ ing.name }}</li>
+                                {% empty %}
+                                   <li><em>Sem ingredientes</em></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td class="actions-cell">
+                            <a href="{% url 'ERP:edit_recipe' recipe.id %}" class="edit-btn">✏️</a>
+                            <a href="{% url 'ERP:delete_recipe' recipe.id %}" class="delete-btn">🗑️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">Nenhuma receita... adicione a primeira!</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <script src="{% static 'ERP/js/admin_inline.js' %}"></script>
+
+</body>
+</html>

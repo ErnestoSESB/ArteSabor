@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendamento realizado</title>
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stand/main.css' %}">
+</head>
+<body>
+    {% include 'stand/header.html' %}
+    <section class="cart-container">
+        <h2>Agendamento realizado com sucesso!</h2>
+        <p style="color:#222; font-size:1.1em; margin-bottom:20px;">Seu pedido foi agendado. O pagamento será realizado manualmente após confirmação. Entraremos em contato para combinar os detalhes.</p>
+        <a href="{% url 'stand:main' %}" class="checkout-btn" style="display:inline-block; text-align:center; text-decoration:none;">Voltar para vitrine</a>
+    </section>
+</body>
+</html>

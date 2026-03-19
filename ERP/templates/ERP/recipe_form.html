@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ action }} Receita</title>
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/forms.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'ERP/css/recipe_form_inline.css' %}" />
+</head>
+<body>
+    {% include 'ERP/admin_header.html' %}
+
+    <main class="form-container">
+        <h2>{{ action }} Receita</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Título da Receita:</label>
+                <input type="text" name="title" required value="{{ recipe.title }}">
+            </div>
+            
+            <div class="form-group">
+                <label>Modo de Preparo / Instruções:</label>
+                <textarea name="instructions" rows="5" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">{{ recipe.instructions }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Ingredientes:</label>
+                <div class="ingredients-list" id="ing-list">
+                    {% if recipe %}
+                        {% for ing in recipe.ingredients.all %}
+                        <div class="ingredient-row">
+                            <input type="text" name="ingredient_qty[]" placeholder="Qtd. (ex: 200g)" value="{{ ing.quantity }}">
+                            <input type="text" name="ingredient_name[]" placeholder="Nome (ex: Chocolate)" value="{{ ing.name }}" style="flex:1;">
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="ingredient-row">
+                            <input type="text" name="ingredient_qty[]" placeholder="Qtd. (ex: 200g)">
+                            <input type="text" name="ingredient_name[]" placeholder="Nome (ex: Chocolate)" style="flex:1;">
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">X</button>
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="button" class="add-ing-btn" onclick="addIngredient()">+ Adicionar Ingrediente</button>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Salvar Receita</button>
+                <a href="{% url 'ERP:admin' %}" class="cancel-btn">Cancelar</a>
+            </div>
+        </form>
+    </main>
+
+    <script src="{% static 'ERP/js/recipe_form_inline.js' %}"></script>
+</body>
+</html>

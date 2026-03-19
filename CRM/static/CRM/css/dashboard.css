@@ -1,0 +1,342 @@
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+.sidebar {
+    width: 260px;
+    background-color: var(--primary-color, #b35d6e);
+    color: #ebdcd5;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    padding: 20px 24px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    text-decoration: none;
+}
+
+.sidebar-brand span { margin-left: 10px; font-family: 'Playfair Display', serif; }
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.sidebar-menu li {
+    position: relative;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    color: #ebdcd5;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.sidebar-menu a:hover {
+    background-color: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.sidebar-menu li.active > a {
+.sidebar-menu li.active > a {
+    color: #fff;
+    background-color: rgba(255,255,255,0.08);
+}
+.sidebar-menu li.active > a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--primary-color, #b35d6e);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.menu-icon {
+    width: 20px;
+    margin-right: 15px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.badge {
+    background-color: var(--primary-color, #b35d6e);
+    color: white;
+    font-size: 0.70rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: auto;
+}
+
+/* Dropdown Estilo */
+.has-submenu > a::after {
+    content: '›';
+    font-size: 0.7rem;
+    margin-left: auto;
+    transform: rotate(90deg);
+    transition: transform 0.2s;
+}
+.has-submenu.open > a::after {
+    transform: rotate(270deg);
+}
+.submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #2b1d18;
+    overflow: hidden;
+    display: none;
+}
+.has-submenu.open .submenu {
+    display: block;
+}
+.submenu a {
+    padding: 10px 24px 10px 60px; /* Recuo extra */
+    font-size: 0.85rem;
+}
+.submenu a::before {
+    content: '—';
+    font-size: 0.8rem;
+    margin-right: 10px;
+    opacity: 0.3;
+}
+
+/* --- Conteúdo Principal --- */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.top-navbar {
+    height: 60px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.content-area {
+    padding: 30px;
+    flex: 1;
+}
+
+.page-title {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.clients-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.client-card {
+    background: #fff;
+    border: 1px solid #efe7de;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 16px;
+}
+
+.client-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.client-name {
+    margin: 0;
+    color: #2f2f2f;
+    font-size: 1.1rem;
+}
+
+.client-meta {
+    margin: 4px 0 0;
+    color: #6f6f6f;
+    font-size: 0.92rem;
+}
+
+.client-kpis {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.client-kpis span {
+    background: #f8f3ef;
+    border: 1px solid #eadfd5;
+    border-radius: 999px;
+    color: #604c43;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    white-space: nowrap;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.crm-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.crm-table th,
+.crm-table td {
+    border-bottom: 1px solid #f0e8df;
+    font-size: 0.92rem;
+    padding: 10px 12px;
+    text-align: left;
+}
+
+.crm-table th {
+    color: #5f5a56;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.order-badge {
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 10px;
+}
+
+.order-badge.delivered {
+    background: #d4edda;
+    color: #155724;
+}
+
+.order-badge.canceled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.order-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.order-badge.processing {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.empty-state {
+    background: #fff;
+    border: 1px dashed #d6c9bc;
+    border-radius: 12px;
+    color: #7a7068;
+    font-size: 1rem;
+    padding: 30px 16px;
+    text-align: center;
+}
+
+@media (max-width: 992px) {
+    .dashboard-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        height: auto;
+        position: relative;
+        width: 100%;
+    }
+
+    .sidebar-menu {
+        display: flex;
+        margin: 0;
+        overflow-x: auto;
+        padding-bottom: 6px;
+        white-space: nowrap;
+    }
+
+    .sidebar-menu li {
+        flex: 0 0 auto;
+    }
+
+    .top-navbar {
+        padding: 0 16px;
+    }
+
+    .content-area {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .client-card-header {
+        flex-direction: column;
+    }
+
+    .client-kpis {
+        justify-content: flex-start;
+    }
+
+    .crm-orders-table thead {
+        display: none;
+    }
+
+    .crm-orders-table,
+    .crm-orders-table tbody,
+    .crm-orders-table tr,
+    .crm-orders-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .crm-orders-table tr {
+        border-bottom: 1px solid #efe7de;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+    }
+
+    .crm-orders-table td {
+        align-items: center;
+        border-bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+    }
+
+    .crm-orders-table td::before {
+        color: #6e645c;
+        content: attr(data-label);
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-right: 12px;
+    }
+}
+}

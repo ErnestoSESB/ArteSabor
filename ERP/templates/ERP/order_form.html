@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arte & Sabor - Editar Pedido</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/order_form_inline.css' %}" />
+</head>
+<body>
+
+{% include 'ERP/admin_header.html' %}
+
+<div class="form-container">
+    <h2>{% if form.instance.id %}Editar{% else %}Novo{% endif %} Pedido</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.client.id_for_label }}">Cliente</label>
+            {{ form.client }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.status.id_for_label }}">Status do Pedido</label>
+            {{ form.status }}
+        </div>
+
+        <div class="formset-header">Itens do Pedido</div>
+        {{ formset.management_form }}
+        
+        <div id="formset-container">
+            {% for item_form in formset %}
+            <div class="formset-row">
+                {% for hidden in item_form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                <div class="form-group">
+                    <label>Produto</label>
+                    {{ item_form.product }}
+                </div>
+                <div class="form-group">
+                    <label>Quantidade</label>
+                    {{ item_form.quantity }}
+                </div>
+                {% if item_form.instance.pk %}
+                    <div class="form-group" style="display:flex; align-items:center; gap:5px;">
+                        {{ item_form.DELETE }} <label style="margin:0;color:#e74c3c;">Excluir este item</label>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="submit-btn">Salvar Pedido</button>
+        <a href="{% url 'ERP:admin' %}" class="cancel-link">Cancelar</a>
+    </form>
+</div>
+
+</body>
+</html>

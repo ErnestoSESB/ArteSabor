@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel CRM - Arte & Sabor</title>
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link rel="stylesheet" href="{% static 'CRM/css/dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include 'ERP/admin_header.html' %}
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li style="margin: 15px 24px 5px; font-size: 0.70rem; color: #ffffff; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;">
+                    Painel CRM
+                </li>
+                <li class="{% if active_page == 'funnel' %}active{% endif %}">
+                    <a href="{% url 'CRM:dashboard' %}">
+                        <span class="menu-icon">📊</span> Funil da Vitrine
+                    </a>
+                </li>
+                <li class="{% if active_page == 'relationship' %}active{% endif %}">
+                    <a href="{% url 'CRM:relationship' %}">
+                        <span class="menu-icon">👥</span> Relacionamento
+                    </a>
+                </li>
+                <li class="has-submenu open">
+                    <a href="#" onclick="this.parentElement.classList.toggle('open')">
+                        <span class="menu-icon">🛒</span> Controle
+                        <span class="badge">Novo</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="#">Campanhas</a></li>
+                        <li><a href="#">Metas de Vendas</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <header class="top-navbar">
+                <div style="font-size: 1rem; color: #666; font-weight: 500;">
+                    Visão Geral
+                </div>
+            </header>
+            <div class="content-area">
+                {% if active_page == 'funnel' %}
+                    <h2 class="page-title">Desempenho e Funil da Vitrine</h2>
+                    {% include 'CRM/funnel.html' %}
+                {% elif active_page == 'relationship' %}
+                    <h2 class="page-title">Base de Clientes e Retenção</h2>
+                    {% include 'CRM/relationship.html' %}
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

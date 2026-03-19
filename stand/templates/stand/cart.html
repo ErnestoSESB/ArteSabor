@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Arte & Sabor - Carrinho</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/main.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/header.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/cart.css' %}">
+
+</head>
+
+<body>
+
+    {% include 'stand/header.html' %}
+
+
+
+            <section class="cart-container">
+
+        <h2>Seu carrinho</h2>
+
+        
+
+        {% if pending_order %}
+
+            <div class="pending-orders-container" style="background:#fff3cd; padding:15px; border-radius:8px; margin-bottom: 20px; border:1px solid #ffeeba;">
+
+                <h3 style="color:#856404; margin-bottom:10px;">Pedidos Pendentes</h3>
+
+                <p style="font-size:0.9em; color:#856404; margin-bottom:10px;">* Você já possui um pedido pendente. Ajuste a quantidade dos itens para concluir.</p>
+
+                    <form id="pending-order-form" method="POST" action="{% url 'stand:pay_pending_order' pending_order.id %}" style="margin-bottom:10px; border-bottom:1px solid #ffeeba; padding-bottom:10px; display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: flex-start;">
+
+                        {% csrf_token %}
+
+                        <div style="flex: 1 1 320px; min-width: 0;">
+
+                            <strong>Pedido #{{ pending_order.id|stringformat:"s"|slice:":8" }}</strong> - Total atual: R$ <span id="pending-order-total">{{ pending_order.get_total|floatformat:2 }}</span><br>
+
+                            <p style="font-size:0.8em; margin: 3px 0;">(Use 0 para remover um item do pedido)</p>
+
+                            <ul style="margin-top: 5px; list-style-type: none; padding-left: 0; color: #856404;">
+
+                            {% for item in pending_order.items.all %}
+
+                                <li style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 10px;">
+
+                                    <span style="flex: 1 1 240px;">
+                                        {{ item.product.name }} (R$ {{ item.product.price|floatformat:2 }} un.)
+                                        <br>
+                                        <small>Subtotal: R$ <span class="pending-item-subtotal">{{ item.get_total|floatformat:2 }}</span></small>
+                                    </span>
+
+                                    <div style="display: flex; align-items: center; background: #fff; border: 1px solid #d6c69c; border-radius: 4px; overflow: hidden; flex: 0 0 auto;">
+                                        <button type="button" onclick="updatePendingQty(this, -1)" style="background: none; border: none; padding: 4px 10px; cursor: pointer; color: #856404; font-weight: bold; font-size: 16px; user-select: none;">-</button>
+                                        <input type="number" name="item_qty_{{ item.id }}" value="{{ item.quantity }}" min="0" readonly class="pending-item-qty" data-unit-price="{{ item.product.price|floatformat:2 }}" style="width: 40px; text-align: center; border: none; padding: 4px 0; outline: none; -moz-appearance: textfield; pointer-events: none; margin: 0;">
+                                        <button type="button" onclick="updatePendingQty(this, 1)" style="background: none; border: none; padding: 4px 10px; cursor: pointer; color: #856404; font-weight: bold; font-size: 16px; user-select: none;">+</button>
+                                    </div>
+
+                                </li>
+
+                            {% endfor %}
+
+                            </ul>
+
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 8px; flex: 0 0 210px; width: 100%; max-width: 210px;">
+
+                            <button type="submit" name="action" value="pay" style="display: block; width: 100%; background-color: #27ae60; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 0.9em;">Concluir Pedido</button>
+                            <button type="submit" name="action" value="cancel" style="display: block; width: 100%; background-color: #c0392b; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 0.9em;">Cancelar Pedido</button>
+
+                        </div>
+
+                    </form>
+
+            </div>
+
+        {% endif %}
+
+
+
+        {% if cart_items %}
+
+        <form method="POST" action="{% url 'stand:checkout' %}">
+
+            {% csrf_token %}
+
+            <div class="cart-items">
+
+                {% for item in cart_items %}
+
+                <div class="cart-card" style="display: flex; align-items: center;">
+
+                    <div style="margin-right: 15px;">
+
+                        <input type="checkbox" name="selected_items" value="{{ item.product.id }}" checked style="width: 20px; height: 20px; cursor: pointer;">
+
+                    </div>
+
+                    <img src="{{ item.image_url }}" alt="{{ item.product.name }}" class="item-img">
+
+
+
+                    <div class="item-details" style="flex-grow: 1;">
+
+                        <h4>{{ item.product.name }}</h4>
+
+                        <p class="item-price">R$ {{ item.product.price|floatformat:2 }}</p>
+
+                        
+                        <button type="submit" formaction="{% url 'stand:remove_from_cart' item.product.id %}" formmethod="post" class="remove-from-cart-link">remover produto do carrinho</button>
+
+                    </div>
+
+
+
+                    <div class="quantity-controls">
+
+                        <span>Qtd: {{ item.quantity }}</span>
+
+                    </div>
+
+
+
+                    <p class="item-subtotal">R$ {{ item.subtotal|floatformat:2 }}</p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            
+
+            <div class="cart-summary">
+
+                <div class="total-row">
+
+                    <span>Total ({{ cart_count }} itens)</span>
+
+                    <span class="total-price">R$ {{ cart_total|floatformat:2 }}</span>
+
+                </div>
+
+                
+
+                <p style="font-size: 0.9em; color: #666; margin-bottom: 10px; text-align: center;">
+
+                    <em>Selecione quais itens deseja comprar desmarcando as opções acima.</em>
+
+                </p>
+
+
+
+                {% if messages %}
+
+                    <div style="margin-bottom: 15px;">
+
+                        {% for message in messages %}
+
+                            <p style="color: #e74c3c; text-align: center; font-weight: bold;">{{ message }}</p>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+                <div style="margin-bottom: 15px; text-align: center;">
+                    <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="schedule-order-checkbox" name="schedule_order" value="1" style="width: 18px; height: 18px;">
+                        <span style="font-size: 1em; color: #333;">Agendar encomenda (pagamento manual)</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="checkout-btn" id="pay-btn" style="width: 100%;">Finalizar Pedido (Pagar com PIX)</button>
+                <button type="submit" class="checkout-btn" id="schedule-btn" style="width: 100%; display: none; background: #f7b731; color: #222;">Agendar Pedido</button>
+                <div id="schedule-info" style="display: none; margin-top: 10px; color: #f7b731; text-align: center; font-size: 0.95em;">
+                    <strong>O pagamento será realizado manualmente após o agendamento. Entraremos em contato para confirmar.</strong>
+                </div>
+
+            </div>
+
+        </form>
+
+        {% else %}
+
+        <p class="cart-empty">Seu carrinho esta vazio.</p>
+
+        <a href="{% url 'stand:main' %}" class="checkout-btn" style="display:inline-block; text-align:center; text-decoration:none;">Voltar para vitrine</a>
+
+        {% endif %}
+
+    </section>
+
+
+
+<script src="{% static 'js/stand/cart_inline.js' %}"></script>
+
+</body>
+
+</html>
+

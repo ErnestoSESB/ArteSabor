@@ -1,0 +1,119 @@
+/* Estilos específicos para a tela do Checkout PIX */
+.pix-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.pix-container h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 2rem;
+    font-family: 'Playfair Display', serif;
+}
+
+.pix-container p {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.qr-code-box {
+    margin: 30px 0;
+    padding: 20px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: #fafafa;
+}
+
+.qr-code-box img {
+    max-width: 250px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.copia-cola-box {
+    margin-top: 20px;
+    text-align: left;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.copia-cola-box label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #444;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #555;
+    font-family: monospace;
+    background-color: #fff;
+}
+
+.copy-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.copy-btn:hover {
+    background: #924d5a;
+    transform: translateY(-1px);
+}
+
+.copy-btn:active {
+    transform: translateY(1px);
+}
+
+.success-msg {
+    color: #27ae60 !important;
+    font-weight: bold;
+    margin-top: 12px !important;
+    display: none;
+    font-size: 0.9rem !important;
+    text-align: center;
+}
+
+.btn-voltar {
+    display: inline-block;
+    margin-top: 30px;
+    color: #777;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+.btn-voltar:hover {
+    background: #f1f1f1;
+    color: #333;
+    text-decoration: none;
+}

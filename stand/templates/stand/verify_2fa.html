@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verificação de 2 Fatores - Arte & Sabor</title>
+
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/main.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/login.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="login-body">
+
+
+
+    <div class="login-page-container">
+
+        
+
+        <div class="login-visual-panel">
+
+            <div class="visual-content">
+
+                <div class="logo">🍰 Arte & Sabor</div>
+
+                <h1>Quase lá!</h1>
+                <p>Nós enviamos um código de verificação para o seu email. Por favor, insira-o para continuar.</p>
+            </div>
+
+            <div class="overlay"></div>
+
+        </div>
+
+
+
+        <div class="login-form-panel">
+
+            <div class="form-wrapper">
+
+                <h2>Verificação em 2 Fatores</h2>
+
+                
+
+                {% if messages %}
+
+                <div class="messages" style="margin-bottom: 15px; padding: 10px; background: #ffe6e6; border-radius: 5px; border: 1px solid #ffcccc; color: #d9534f; font-weight: 500;">
+
+                    {% for message in messages %}
+
+                    <div class="alert alert-{{ message.tags }}" style="margin: 0; padding: 0;">{{ message }}</div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+                
+
+                <form method="post" action="{% url 'stand:verify_2fa' %}">
+
+                    {% csrf_token %}
+
+                    
+
+                    <div class="input-group">
+
+                        <label for="otp_code">Código de Verificação</label>
+
+                        <input type="text" id="otp_code" name="otp_code" placeholder="Digite o código de 6 dígitos" required>
+
+                    </div>
+
+                    <button type="submit" class="login-btn">Verificar e Entrar</button>
+
+                </form>
+
+                <div class="footer-links">
+
+                    <p>Não recebeu o código? <a href="{% url 'stand:login' %}">Tentar novamente</a></p>
+
+                    <a href="{% url 'stand:login' %}" class="back-to-shop">← Voltar ao login</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+
+
+</body>
+
+</html>

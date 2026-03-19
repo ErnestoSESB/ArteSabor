@@ -1,0 +1,240 @@
+
+.admin-container {
+    padding: 40px 5%;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.admin-header h2 {
+    margin: 0;
+    color: var(--text-dark);
+}
+
+.add-new-btn {
+    background: var(--primary-color);
+    color: var(--bg-white);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.add-new-btn:hover {
+    opacity: 0.9;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-hover);
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.tab.active {
+    background: var(--bg-white);
+    color: var(--text-dark);
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-color: var(--bg-white);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.admin-table th {
+    background: var(--table-header-bg);
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.admin-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f5f5f5;
+    vertical-align: middle;
+}
+
+.thumb {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.badge {
+    background: var(--badge-bg);
+    color: var(--primary-color);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.actions a {
+    text-decoration: none;
+    margin-right: 12px;
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+.actions a:hover {
+    transform: scale(1.2);
+}
+
+.delete-btn {
+    filter: grayscale(0.5);
+}
+
+.clients-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.client-summary-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.client-summary-title {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--text-dark);
+}
+
+.client-summary-subtitle {
+    margin: 6px 0 14px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.client-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.client-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.client-field label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.client-field input {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #faf8f5;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    padding: 10px 12px;
+}
+
+.client-field-full {
+    grid-column: 1 / -1;
+}
+
+.empty-customers {
+    background: var(--bg-white);
+    border: 1px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.payments-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.payments-summary-card {
+    background: var(--bg-white);
+    border: 1px solid #dce9dd;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.payments-summary-card.pending {
+    border-color: #ecd7b5;
+}
+
+.payments-summary-card h3 {
+    margin: 4px 0;
+    font-size: 1.5rem;
+}
+
+.payments-summary-card p {
+    margin: 0;
+}
+
+.payments-summary-label {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.payment-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.payment-badge.paid {
+    background: #dff3e4;
+    color: #1e7a46;
+}
+
+.payment-badge.pending {
+    background: #fff1d8;
+    color: #8a6422;
+}
+
+@media (max-width: 700px) {
+    .client-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

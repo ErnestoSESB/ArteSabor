@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Arte & Sabor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/forms.css' %}">
+</head>
+<body>
+
+{% include 'ERP/admin_header.html' %}
+
+<div class="form-container">
+    <h2>{% if form.instance.id %}Editar{% else %}Novo{% endif %} Doce</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">Nome</label>
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.price.id_for_label }}">Preço</label>
+            {{ form.price }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Descrição</label>
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.stock.id_for_label }}">Estoque</label>
+            {{ form.stock }}
+        </div>
+        <div class="form-group">
+            <label for="id_category">Categoria</label>
+            {{ form.category }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.image.id_for_label }}">Imagem principal</label>
+            {{ form.image }}
+        </div>
+        <div class="form-group">
+            <label for="id_extra_images">Imagens adicionais <small style="color:#aaa;">(máx. 6, segure Ctrl para selecionar múltiplas)</small></label>
+            {{ form.extra_images }}
+            {% if existing_images %}
+            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                {% for img in existing_images %}
+                <img src="{{ img.image.url }}" style="width:70px; height:70px; object-fit:cover; border-radius:6px; border:1px solid #ddd;">
+                {% endfor %}
+            </div>
+            <small style="color:#aaa;">* Novas imagens serão adicionadas às já existentes, até o limite.</small>
+            {% endif %}
+            {% if form.extra_images.errors %}
+            <p style="color:#e74c3c; font-size:0.85rem; margin-top:5px;">{{ form.extra_images.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+            {{ form.is_active }}
+            <label for="{{ form.is_active.id_for_label }}" style="margin: 0;">Ativo</label>
+        </div>
+        <button type="submit" class="submit-btn">Salvar</button>
+        <a href="{% url 'ERP:admin' %}" class="cancel-link">Cancelar</a>
+    </form>
+</div>
+
+</body>
+</html>

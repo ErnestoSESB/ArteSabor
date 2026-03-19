@@ -1,0 +1,96 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pagamento PIX - Arte & Sabor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/main.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/header.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/cart.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/checkout.css' %}">
+
+</head>
+
+<body>
+
+
+
+{% include 'stand/header.html' %}
+
+
+
+<div class="pix-container">
+
+    <h2>Pague com PIX</h2>
+
+    <p>Escaneie o QR Code abaixo com o aplicativo do seu banco para finalizar o <strong>Pedido #{{ order.id|stringformat:"s"|slice:":8" }}</strong> no valor de <strong>R$ {{ order.get_total|floatformat:2 }}</strong>.</p>
+
+    
+
+    <div class="qr-code-box">
+
+        {% if qr_code_link %}
+
+            <img src="{{ qr_code_link }}" alt="QR Code PIX">
+
+        {% else %}
+
+            <p>Ocorreu um erro ao carregar a imagem do QR Code.</p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <div class="copia-cola-box">
+
+        <label>Ou PIX Copia e Cola:</label>
+
+        <div class="input-group">
+
+            <input type="text" id="pix-texto" value="{{ qr_text }}" readonly>
+
+            <button type="button" class="copy-btn" onclick="copiarPix()">Copiar</button>
+
+        </div>
+
+        <p class="success-msg" id="msg-copiado">Copiado com sucesso!</p>
+
+    </div>
+
+
+
+    <a href="{% url 'stand:profile' %}" class="btn-voltar">Acompanhar meu pedido</a>
+
+</div>
+
+
+
+{% include 'stand/footer.html' %}
+
+
+
+<script src="{% static 'js/stand/checkout_pix_inline.js' %}"></script>
+
+
+
+</body>
+
+</html>
+

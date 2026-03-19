@@ -1,0 +1,47 @@
+.admin-top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background: #fff;
+    border-bottom: 1px solid #ece8e4;
+}
+
+.admin-top-header .logo {
+    color: var(--text-dark, #333);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.admin-top-header nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-top-header nav a {
+    text-decoration: none;
+    color: var(--text-muted, #888);
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.admin-top-header nav a:hover {
+    background: var(--primary-color, #ac3c53);
+    color: #fff;
+}
+
+@media (max-width: 640px) {
+    .admin-top-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 4%;
+    }
+
+    .admin-top-header nav {
+        flex-wrap: wrap;
+    }
+}

@@ -1,0 +1,15 @@
+<header>
+    <div class="logo">🧁 Arte & Sabor</div>
+    <nav>
+        <a href="{% url 'stand:main' %}">Vitrine</a>
+        <a href="{% url 'stand:cart' %}">Carrinho</a>
+        <a href="{% url 'stand:profile' %}">Perfil</a>
+
+        {% if request.user.is_authenticated and request.user.is_staff %}
+            <span style="border-left: 1px solid #ccc; margin: 0 10px;"></span>
+            <a href="{% url 'ERP:admin' %}" style="color: #b35d6e; font-weight: 600;">Admin</a>
+            <a href="{% url 'CRM:dashboard' %}" style="color: #b35d6e; font-weight: 600;">CRM</a>
+        {% endif %}
+    </nav>
+    <a href="{% url 'stand:cart' %}" class="cart-icon">🛒</a>
+</header>

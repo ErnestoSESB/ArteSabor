@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Exclusão de Receita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/recipe_confirm_delete_inline.css' %}" />
+</head>
+<body>
+{% include 'ERP/admin_header.html' %}
+<div class="confirm-container">
+    <h2>Excluir Receita</h2>
+    <p>Tem certeza que deseja excluir a receita <strong>{{ object.title }}</strong>?</p>
+    <p style="color: #999; font-size: 13px;">Isso excluirá todo o modo de preparo e os {{ object.ingredients.count }} ingredientes vinculados permanentemente.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn-danger">Sim, excluir Receita</button>
+        <a href="{% url 'ERP:admin' %}" class="cancel-link">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

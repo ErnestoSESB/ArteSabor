@@ -1,0 +1,51 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #b35d6e;
+    --primary-color-hover: #9a4d5b;
+    --primary-color-light: #d18d96;
+    --bg-light: #f9f7f4;
+    --bg-white: #ffffff;
+    --bg-hover: #f0eeee;
+    --bg-card: #fdfaf7;
+    --bg-testimonial: #f7f3ed;
+    --text-dark: #333;
+    --text-darker: #3b2821;
+    --text-muted: #888;
+    --text-muted-light: #777;
+    --text-brown: #6d5b5b;
+    --text-gold: #c48a5c;
+    --border-color: #efeae2;
+    --border-testimonial: #e8e1d5;
+    --border-light: #eee;
+    --gold-accent: #d89f3c;
+    --gold-badge: #df9e4b;
+    --badge-bg: #fdf2f4;
+    --table-header-bg: #fafafa;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+a:hover {
+    color: var(--primary-color-hover);
+}
+
+
+:root {
+    --container-width: 90%;
+    --container-max-width: 1200px;
+    --font-heading: \'Playfair Display\', serif;
+}

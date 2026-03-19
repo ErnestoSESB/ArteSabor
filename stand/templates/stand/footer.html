@@ -1,0 +1,69 @@
+{% load static %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/stand/footer.css' %}">
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-column brand-col">
+            <h3 class="footer-logo">Arte & Sabor</h3>
+            <p>Doces artesanais feitos com amor, carinho e os melhores ingredientes selecionados.</p>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/artesabor_doceria/?__pwa=1" aria-label="Instagram" target="_blank">
+                    <img src="/media/instagram-1-svgrepo-com.svg" alt="Instagram" class="instagram-icon">
+                </a>
+            </div>
+        </div>
+        <div class="footer-column links-col">
+            <h4>NAVEGAÇÃO</h4>
+            <ul>
+                <li><a href="{% url 'stand:main' %}">Vitrine</a></li>
+                <li><a href="{% url 'stand:cart' %}">Carrinho</a></li>
+                <li><a href="{% url 'stand:profile' %}">Meu Perfil</a></li>
+            </ul>
+        </div>
+        <div class="footer-column contact-col">
+            <h4>CONTATO</h4>
+            <ul>
+                <li>📞 (84) 986336674</li>
+
+                <li>✉️ katylensilva27@gmail.com</li>
+
+                <li>📍 Almino Afonso, RN</li>
+
+            </ul>
+
+        </div>
+
+        
+
+        <div class="footer-column hours-col">
+
+            <h4>HORÁRIOS</h4>
+
+            <ul>
+
+                <li>Seg - Sex: 9h às 19h</li>
+
+                <li>Sábado: 9h às 16h</li>
+
+                <li>Domingo: Fechado</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<a href="https://wa.me/5584986336674" target="_blank" rel="noopener noreferrer" class="floating-whatsapp" aria-label="Fale conosco no WhatsApp">
+
+    <span class="notification-dot"></span>
+
+    <img src="/media/whatsapp-svgrepo-com.svg" alt="WhatsApp" class="whatsapp-icon">
+
+</a>
+

@@ -1,0 +1,587 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Arte & Sabor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/stand/header.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/main.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/vitrine.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/carousel.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/testimonials.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/hero.css' %}">
+
+
+
+    <link rel="stylesheet" href="{% static 'css/stand/main_inline.css' %}" />
+
+
+
+</head>
+
+<body>
+
+    {% include 'stand/header.html' %}
+
+
+
+    <section class="hero">
+
+        <div class="floating-emojis"></div>
+
+        
+
+        <div class="hero-content">
+
+            
+
+            <h1>Arte<br><span>&</span><br><span>Sabor</span></h1>
+
+            <p>Doces artesanais que encantam os olhos e aquecem o coração</p>
+
+            <div class="hero-badge">✨ Feito com amor e carinho</div>
+
+            <div class="hero-buttons">
+
+                <a href="#vitrine-section" class="hero-btn primary">Ver Vitrine<span style="font-size:1.2rem;">⌄</span></a>
+
+                <a href="#vitrine-section" class="hero-btn secondary">Categorias</a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="stats-section">
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+
+                </div>
+
+                <div class="stat-number" data-target="{{ stats.happy_customers }}" data-append="+">0</div>
+
+                <div class="stat-text">Clientes Felizes</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+
+                </div>
+
+                <div class="stat-number" data-target="{{ stats.pastries_sold }}" data-append="+">0</div>
+
+                <div class="stat-text">Doces Vendidos</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+
+                </div>
+
+                <div class="stat-number" data-target="{{ stats.years_experience }}" data-append="">0</div>
+
+                <div class="stat-text">Anos de Experiência</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+
+                </div>
+
+                <div class="stat-number" data-target="{{ stats.exclusive_recipes }}" data-append="+">0</div>
+
+                <div class="stat-text">Receitas Exclusivas</div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="destaques-container">
+
+        <div class="destaques-header">
+
+            <h2>⭐ Destaques</h2>
+
+            <div class="carousel-nav">
+
+                <button class="nav-prev" type="button" aria-label="Ver destaques anteriores">&larr;</button>
+
+                <button class="nav-next" type="button" aria-label="Ver proximos destaques">&rarr;</button>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="carousel-track" id="destaques-track">
+
+            {% for product in destaques %}
+
+            <article class="carousel-item">
+
+                <img src="{{ product.cover_image }}" alt="{{ product.name }}">
+
+
+
+                <div class="item-overlay">
+
+                    {% if product.category_link.category %}
+
+                    <span class="item-badge">{{ product.category_link.category.name }}</span>
+
+                    {% else %}
+
+                    <span class="item-badge">Sem categoria</span>
+
+                    {% endif %}
+
+
+
+                    <h3>{{ product.name }}</h3>
+
+
+
+                    <div class="item-footer">
+
+                        <span class="item-price">R$ {{ product.price|floatformat:2 }}</span>
+
+                        <button
+
+                            class="add-to-cart-btn js-add-to-cart" data-product-id="{{ product.id }}" data-product-id="{{ product.id }}"
+
+                            type="button"
+
+                            data-id="{{ product.id }}" data-name="{{ product.name|escapejs }}"
+
+                            data-image="{{ product.cover_image|escapejs }}"
+
+                            data-add-url="{% url 'stand:add_to_cart' product.id %}"
+
+                        >+</button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% empty %}
+
+            <p class="destaques-empty">Nenhum destaque disponivel no momento.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+
+    <section class="filters" id="vitrine-section">
+
+        <h3>Categorias</h3>
+
+        <div class="filter-tags">
+
+            <a href="{% url 'stand:main' %}#vitrine-section" class="category-card{% if not selected_category_id %} active{% endif %}">
+
+                <div class="category-icon-wrapper">
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+
+                </div>
+
+                <span class="category-name">Todos</span>
+
+                <span class="category-count">{{ total_active_products }} itens</span>
+
+            </a>
+
+            
+
+            {% for category in categories %}
+
+            <a href="{% url 'stand:main' %}?category={{ category.id }}#vitrine-section" class="category-card{% if selected_category_id == category.id|stringformat:'s' %} active{% endif %}">
+
+                <div class="category-icon-wrapper">
+
+                    {% if "bolo" in category.name|lower or "torta" in category.name|lower %}
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"></path><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"></path><path d="M2 21h20"></path><path d="M7 8v2"></path><path d="M12 8v2"></path><path d="M17 8v2"></path><path d="M7 4h.01"></path><path d="M12 4h.01"></path><path d="M17 4h.01"></path></svg>
+
+                    {% elif "cupcake" in category.name|lower or "doce" in category.name|lower %}
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5a5.5 5.5 0 0 1 5.5 5.5v.5h-11v-.5A5.5 5.5 0 0 1 12 2.5Z"></path><path d="M6 8.5v2a6 6 0 0 0 12 0v-2"></path><path d="m14 10.5 1 10h-6l1-10"></path></svg>
+
+                    {% elif "macaron" in category.name|lower or "cookie" in category.name|lower or "brownie" in category.name|lower %}
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"></path><path d="M8.5 8.5v.01"></path><path d="M16 15.5v.01"></path><path d="M12 12v.01"></path><path d="M11 17v.01"></path><path d="M7 14v.01"></path></svg>
+
+                    {% elif "trufa" in category.name|lower or "chocolate" in category.name|lower or "brigadeiro" in category.name|lower %}
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+
+                    {% else %}
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+
+                    {% endif %}
+
+                </div>
+
+                <span class="category-name">{{ category.name }}</span>
+
+                <span class="category-count">{{ category.item_count }} item{{ category.item_count|pluralize:"s" }}</span>
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+
+    <div class="products-header">
+
+        <h2>Nossos Produtos</h2>
+
+    </div>
+
+    {% if brigadeiro_products %}
+
+    <section class="custom-hundred-card">
+        <div class="custom-hundred-text">
+            <h3>Cento Personalizado de Brigadeiros</h3>
+            <p>Escolha 2 ou 3 sabores da categoria brigadeiro.</p>
+        </div>
+        <button id="open-custom-hundred-modal" class="hero-btn primary" type="button">Montar meu cento</button>
+    </section>
+
+    {% endif %}
+
+
+
+    <main class="product-grid">
+
+        {% for product in products %}
+
+        <article class="product-card">
+
+            <div class="product-image">
+
+                <div class="carousel" id="carousel-{{ forloop.counter }}">
+
+                    {% for image_url in product.carousel_images %}
+
+                    {% if image_url %}
+                        <img src="{{ image_url }}" class="carousel-slide{% if forloop.first %} active{% endif %}" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x300" class="carousel-slide{% if forloop.first %} active{% endif %}" alt="{{ product.name }}">
+                    {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+                {% if product.carousel_images|length > 1 %}
+
+                <button class="carousel-btn prev" onclick="changeSlide('carousel-{{ forloop.counter }}', -1)">&#8249;</button>
+
+                <button class="carousel-btn next" onclick="changeSlide('carousel-{{ forloop.counter }}', 1)">&#8250;</button>
+
+                {% endif %}
+
+                <button
+
+                    class="add-btn js-add-to-cart" data-product-id="{{ product.id }}" data-product-id="{{ product.id }}"
+
+                    type="button"
+
+                    data-id="{{ product.id }}" data-name="{{ product.name|escapejs }}"
+
+                    data-image="{{ product.cover_image|escapejs }}"
+
+                    data-add-url="{% url 'stand:add_to_cart' product.id %}"
+
+                >+</button>
+
+            </div>
+
+            <div class="product-info">
+
+                {% if product.category_link.category %}
+
+                    <p class="category">{{ product.category_link.category.name|upper }}</p>
+
+                {% endif %}
+
+                <h4>{{ product.name }}</h4>
+
+                {% if product.description %}
+
+                    <p class="description">{{ product.description }}</p>
+
+                {% endif %}
+
+                <p class="price">R$ {{ product.price|floatformat:2 }}</p>
+
+            </div>
+
+        </article>
+
+        {% empty %}
+
+        <p style="grid-column: 1/-1; text-align: center; color: #888;">Nenhum produto disponível no momento.</p>
+
+        {% endfor %}
+
+        {% if total_pages > 1 %}
+        <nav class="pagination-nav" style="margin: 30px 0; text-align: center;">
+            <ul class="pagination-list" style="display: inline-flex; gap: 8px;">
+                {% if page > 1 %}
+                <li><a href="?page={{ page|add:'-1' }}{% if selected_category_id %}&category={{ selected_category_id }}{% endif %}#vitrine-section" class="pagination-btn">Anterior</a></li>
+                {% endif %}
+                {% for p in page_numbers %}
+                    <li>
+                        <a href="?page={{ p }}{% if selected_category_id %}&category={{ selected_category_id }}{% endif %}#vitrine-section" class="pagination-btn{% if p == page %} active{% endif %}">{{ p }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < total_pages %}
+                <li><a href="?page={{ page|add:'1' }}{% if selected_category_id %}&category={{ selected_category_id }}{% endif %}#vitrine-section" class="pagination-btn">Próxima</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+    </main>
+    <section class="testimonials-section">
+
+        <div class="section-title-wrapper">
+
+            <h2 class="testimonials-title">O que dizem nossos clientes</h2>
+
+        </div>
+
+        
+
+        <div class="testimonials-grid">
+
+            <div class="testimonial-card">
+
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+
+                <div class="quote-icon">❞</div>
+
+                <p class="testimonial-text">"Encomendei o bolo de chocolate para o aniversário da minha filha. Todos elogiaram! Perfeito."</p>
+
+                <div class="customer-info">
+
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Eduardo" class="customer-avatar">
+
+                    <span class="customer-name">Carlos Eduardo</span>
+
+                </div>
+
+            </div>
+
+            
+
+            <div class="testimonial-card">
+
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+
+                <div class="quote-icon">❞</div>
+
+                <p class="testimonial-text">"Os macarons são obra de arte. Além de lindos, o sabor é incrível. Super recomendo!"</p>
+
+                <div class="customer-info">
+
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Mariana Silva" class="customer-avatar">
+
+                    <span class="customer-name">Mariana Silva</span>
+
+                </div>
+
+            </div>
+
+            
+
+            <div class="testimonial-card">
+
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+
+                <div class="quote-icon">❞</div>
+
+                <p class="testimonial-text">"Atendimento impecável e doces maravilhosos. O cheesecake de frutas vermelhas é viciante!"</p>
+
+                <div class="customer-info">
+
+                    <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="Roberto Almeida" class="customer-avatar">
+
+                    <span class="customer-name">Roberto Almeida</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {% include 'stand/footer.html' %}
+
+
+
+    
+
+    <div id="quantity-modal" class="modal" style="display: none;">
+
+        <div class="modal-content">
+
+            <span class="close-modal">&times;</span>
+
+            <img id="modal-product-image" class="modal-product-image" src="" alt="Imagem do produto">
+
+            <h3 id="modal-product-name" style="margin-bottom: 10px;">Produto</h3>
+
+            <p style="margin-bottom: 20px;">Selecione a quantidade:</p>
+
+            <div class="quantity-controls-modal" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
+
+                <button type="button" id="modal-qty-minus" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; font-size: 20px; cursor: pointer;">-</button>
+
+                <input type="number" id="modal-qty-input" value="1" min="0" style="width: 60px; height: 40px; text-align: center; font-size: 18px; border: 1px solid #ccc; border-radius: 5px;">
+
+                <button type="button" id="modal-qty-plus" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ccc; background: #fff; font-size: 20px; cursor: pointer;">+</button>
+
+            </div>
+
+            <button id="modal-confirm-add" class="hero-btn primary" style="width: 100%;">Adicionar ao Carrinho</button>
+
+            <input type="hidden" id="modal-product-url" value="">
+
+        </div>
+
+    </div>
+
+    {% if brigadeiro_products %}
+    <div id="custom-hundred-modal" class="modal" style="display: none;">
+        <div class="modal-content custom-hundred-modal-content">
+            <button type="button" id="close-custom-hundred-modal" class="close-custom-modal" aria-label="Fechar">&times;</button>
+
+            <h3 style="margin-bottom: 8px;">Monte seu cento personalizado</h3>
+            <p style="margin-bottom: 16px; color: #6f6259;">Selecione 2 ou 3 sabores diferentes.</p>
+
+            <div class="custom-hundred-row">
+                <select class="custom-flavor-select">
+                    <option value="">Sabor 1</option>
+                    {% for product in brigadeiro_products %}
+                        <option value="{{ product.id }}" data-price="{{ product.price|floatformat:2 }}">{{ product.name }} - R$ {{ product.price|floatformat:2 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="custom-hundred-row">
+                <select class="custom-flavor-select">
+                    <option value="">Sabor 2</option>
+                    {% for product in brigadeiro_products %}
+                        <option value="{{ product.id }}" data-price="{{ product.price|floatformat:2 }}">{{ product.name }} - R$ {{ product.price|floatformat:2 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="custom-hundred-toggle-row">
+                <button type="button" id="custom-add-third-flavor" class="custom-add-flavor-btn">+ Adicionar mais um sabor</button>
+                <button type="button" id="custom-remove-third-flavor" class="custom-add-flavor-btn custom-remove-flavor-btn is-hidden">- Usar apenas 2 sabores</button>
+            </div>
+
+            <div id="custom-third-flavor-row" class="custom-hundred-row is-hidden">
+                <select class="custom-flavor-select">
+                    <option value="">Sabor 3</option>
+                    {% for product in brigadeiro_products %}
+                        <option value="{{ product.id }}" data-price="{{ product.price|floatformat:2 }}">{{ product.name }} - R$ {{ product.price|floatformat:2 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="custom-hundred-summary">
+                <span>Total de unidades: <strong><span id="custom-total-units">0</span>/100</strong></span>
+                <span>Valor estimado: <strong>R$ <span id="custom-total-price">0.00</span></strong></span>
+            </div>
+
+            <p style="margin: 0 0 10px; color: #6f6259;">Distribuicao automatica: <strong id="custom-distribution-text">Selecione 2 ou 3 sabores</strong></p>
+
+            <p id="custom-hundred-message" class="custom-hundred-message"></p>
+
+            <button id="custom-hundred-add-btn" class="custom-hundred-submit-btn" type="button">Adicionar cento ao carrinho</button>
+            <input type="hidden" id="custom-hundred-add-url" value="{% url 'stand:add_custom_brigadeiro_hundred' %}">
+        </div>
+    </div>
+    {% endif %}
+
+
+
+    <script src="{% static 'js/stand/carrossel.js' %}"></script>
+
+    <script src="{% static 'js/stand/bubbles.js' %}"></script>
+
+    <script src="{% static 'js/stand/stats.js' %}"></script>
+
+
+
+
+
+
+
+        <script src="{% static 'js/stand/crm_tracker.js' %}"></script>
+</html>
+
+
+

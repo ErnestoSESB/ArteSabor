@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Arte & Sabor</title>
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include 'ERP/admin_header.html' %}
+
+    <section class="admin-container">
+        <div class="admin-header">
+            <div>
+                <h2>Painel Administrativo</h2>
+                <p>Gerencie seus doces e categorias</p>
+            </div>
+            <div id="header-btn-doces">
+                <a href="{% url 'ERP:create_product' %}" class="add-new-btn" style="text-decoration: none;">+ Novo Doce</a>
+            </div>
+            <div id="header-btn-categorias" style="display:none;">
+                <a href="{% url 'ERP:create_category' %}" class="add-new-btn" style="text-decoration: none;">+ Nova Categoria</a>
+            </div>
+            <div id="header-btn-pedidos" style="display:none;">
+                <a href="{% url 'ERP:create_order' %}" class="add-new-btn" style="text-decoration: none;">+ Novo Pedido Manual</a>
+            </div>
+            <div id="header-btn-clientes" style="display:none;">
+                <span class="add-new-btn" style="cursor: default; opacity: 0.85;">Resumo automatico</span>
+            </div>
+            <div id="header-btn-receitas" style="display:none;">
+                <a href="{% url 'ERP:create_recipe' %}" class="add-new-btn" style="text-decoration: none;">+ Nova Receita</a>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="tab active" onclick="showTab('doces', this)">🧁 Doces ({{ doces.count }})</button>
+            <button class="tab" onclick="showTab('categorias', this)">🏷️ Categorias ({{ categories.count }})</button>
+            <button class="tab" onclick="showTab('pedidos', this)">📦 Pedidos ({{ orders.count }})</button>
+            <button class="tab" onclick="showTab('clientes', this)">👥 Clientes ({{ customers|length }})</button>
+            <button class="tab" onclick="showTab('receitas', this)">📖 Receitas ({{ recipes.count }})</button>
+        </div>
+        <div id="tab-doces">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Estoque</th>
+                        <th>Ativo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doce in doces %}
+                    <tr>
+                        <td>
+                            {% if doce.image %}
+                                <img src="{{ doce.image.url }}" class="thumb" alt="{{ doce.name }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/40" class="thumb" alt="Sem imagem">
+                            {% endif %}
+                        </td>
+                        <td>{{ doce.name }}</td>
+                        <td>
+                            {% if doce.category_link.category %}
+                                <span class="badge">{{ doce.category_link.category.name }}</span>
+                            {% else %}
+                                <span style="color:#aaa;">—</span>
+                            {% endif %}
+                        </td>
+                        <td>R$ {{ doce.price|floatformat:2 }}</td>
+                        <td>{{ doce.stock }}</td>
+                        <td>{% if doce.is_active %}✅{% else %}❌{% endif %}</td>
+                        <td class="actions">
+                            <a href="{% url 'ERP:editar_doce' doce.id %}" class="edit-btn">✏️</a>
+                            <a href="{% url 'ERP:excluir_doce' doce.id %}" class="delete-btn">🗑️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px;">Nenhum doce cadastrado no momento.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="tab-categorias" style="display:none;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.description|default:"-" }}</td>
+                        <td class="actions">
+                            <a href="{% url 'ERP:editar_categoria' category.id %}" class="edit-btn">✏️</a>
+                            <a href="{% url 'ERP:excluir_categoria' category.id %}" class="delete-btn">🗑️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 20px;">Nenhuma categoria cadastrada no momento.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-pedidos" style="display:none;">
+            <table class="admin-table" style="width: 100%; mt-4">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td style="font-weight: bold; color: var(--primary-color);">#{{ order.id|stringformat:"s"|slice:":8" }}</td>
+                        <td>{{ order.created_at|date:"d/m/Y - H:i" }}</td>
+                        <td>{{ order.client.username }}</td>
+                        <td>
+                            <span style="padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;
+                            {% if order.status == 'delivered' %}background: #d4edda; color: #155724;
+                            {% elif order.status == 'canceled' %}background: #f8d7da; color: #721c24;
+                            {% else %}background: #fff3cd; color: #856404;{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td style="font-weight: bold;">R$ {{ order.get_total|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px;">Nenhum pedido realizado ainda.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-clientes" style="display:none;">
+            {% if customers %}
+                <div class="clients-grid">
+                    {% for customer in customers %}
+                        <article class="client-summary-card">
+                            <h3 class="client-summary-title">{{ customer.display_name }}</h3>
+                            <p class="client-summary-subtitle">Ficha resumida do cliente</p>
+
+                            <div class="client-form-grid">
+                                <div class="client-field">
+                                    <label>Numero</label>
+                                    <input type="text" value="{{ customer.number }}" readonly>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Email</label>
+                                    <input type="text" value="{{ customer.email }}" readonly>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Localização</label>
+                                    <input type="text" value="{{ customer.city }} - {{ customer.state }}" readonly>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Data de cadastro</label>
+                                    <input type="text" value="{% if customer.date_joined %}{{ customer.date_joined|date:'d/m/Y - H:i' }}{% else %}Nao informado{% endif %}" readonly>
+                                </div>
+
+                                <div class="client-field">
+                                    <label>Numero de pedidos realizados</label>
+                                    <input type="text" value="{{ customer.orders_count }}" readonly>
+                                </div>
+
+                                <div class="client-field client-field-full">
+                                    <label>Ultimo login</label>
+                                    <input type="text" value="{% if customer.last_login %}{{ customer.last_login|date:'d/m/Y - H:i' }}{% else %}Nunca acessou{% endif %}" readonly>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-customers">Nenhum cliente cadastrado no momento.</div>
+            {% endif %}
+        </div>
+
+    
+        <div id="tab-receitas" style="display:none;">
+            <table class="admin-table" style="mt-4">
+                <thead>
+                    <tr>
+                        <th>Receita</th>
+                        <th>Modo de Preparo</th>
+                        <th>Ingredientes</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipe in recipes %}
+                    <tr>
+                        <td><strong>{{ recipe.title }}</strong></td>
+                        <td>{{ recipe.instructions|truncatewords:20 }}</td>
+                        <td>
+                            <ul style="margin:0; padding-left:20px;">
+                                {% for ing in recipe.ingredients.all %}
+                                    <li>{{ ing.quantity }} - {{ ing.name }}</li>
+                                {% empty %}
+                                   <li><em>Sem ingredientes</em></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td class="actions-cell">
+                            <a href="{% url 'ERP:edit_recipe' recipe.id %}" class="edit-btn">✏️</a>
+                            <a href="{% url 'ERP:delete_recipe' recipe.id %}" class="delete-btn">🗑️</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">Nenhuma receita... adicione a primeira!</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <script>
+        function showTab(tab, btn) {
+            document.getElementById('tab-doces').style.display = 'none';
+            document.getElementById('tab-categorias').style.display = 'none';
+            document.getElementById('tab-pedidos').style.display = 'none';
+            document.getElementById('tab-clientes').style.display = 'none';
+            document.getElementById('tab-receitas').style.display = 'none';
+            document.getElementById('header-btn-doces').style.display = 'none';
+            document.getElementById('header-btn-categorias').style.display = 'none';
+            document.getElementById('header-btn-pedidos').style.display = 'none';
+            document.getElementById('header-btn-clientes').style.display = 'none';
+            document.getElementById('header-btn-receitas').style.display = 'none';
+
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.getElementById('tab-' + tab).style.display = 'block';
+            document.getElementById('header-btn-' + tab).style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.id %}Editar{% else %}Nova{% endif %} Categoria - Arte & Sabor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/admin_header.css' %}">
+    <link rel="stylesheet" href="{% static 'ERP/css/forms.css' %}">
+</head>
+<body>
+
+{% include 'ERP/admin_header.html' %}
+
+<div class="form-container">
+    <h2>{% if form.instance.id %}Editar{% else %}Nova{% endif %} Categoria</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">Nome</label>
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Descrição</label>
+            {{ form.description }}
+        </div>
+        <button type="submit" class="submit-btn">Salvar</button>
+        <a href="{% url 'ERP:admin' %}" class="cancel-link">Cancelar</a>
+    </form>
+</div>
+
+</body>
+</html>

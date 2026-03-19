@@ -1,0 +1,257 @@
+.modal {
+
+            position: fixed;
+
+            z-index: 10000;
+
+            left: 0;
+
+            top: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            overflow: auto;
+
+            background-color: rgba(0,0,0,0.5);
+
+            align-items: center;
+
+            justify-content: center;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: opacity 0.22s ease;
+
+        }
+
+        .modal.is-open {
+
+            opacity: 1;
+
+            pointer-events: auto;
+
+        }
+
+        .modal-content {
+
+            background-color: #fefefe;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            width: 90%;
+
+            max-width: 400px;
+
+            text-align: center;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
+            position: relative;
+
+            opacity: 0;
+
+            transform: translateY(8px) scale(0.98);
+
+            transition: opacity 0.22s ease, transform 0.22s ease;
+
+        }
+
+        .modal.is-open .modal-content {
+
+            opacity: 1;
+
+            transform: translateY(0) scale(1);
+
+        }
+
+        .modal-product-image {
+
+            width: 110px;
+
+            height: 110px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            border: 1px solid #efe6dc;
+
+            margin: 0 auto 12px;
+
+            display: block;
+
+            background: #f9f4ef;
+
+        }
+
+        .close-modal {
+
+            position: absolute; right: 20px; top: 15px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;
+
+        }
+
+        .close-modal:hover { color: #000; }
+
+        #modal-qty-input::-webkit-outer-spin-button,
+
+        #modal-qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        #modal-qty-input { appearance: textfield; -moz-appearance: textfield; }
+
+        .custom-hundred-card {
+            width: var(--container-width);
+            max-width: var(--container-max-width);
+            margin: 12px auto 26px;
+            background: #fff6ef;
+            border: 1px solid #f1d8c0;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .custom-hundred-text h3 {
+            margin: 0;
+            font-family: var(--font-heading);
+            color: #7c332a;
+            font-size: 1.4rem;
+        }
+
+        .custom-hundred-text p {
+            margin: 6px 0 0;
+            color: #5f5148;
+        }
+
+        .custom-hundred-modal-content {
+            max-width: 560px;
+            text-align: left;
+            background: linear-gradient(180deg, #fffaf6 0%, #fff 100%);
+            border: 1px solid #efd8c6;
+        }
+
+        .close-custom-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 0;
+            background: transparent;
+        }
+
+        .close-custom-modal:hover {
+            color: #000;
+        }
+
+        .custom-hundred-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .custom-hundred-row.is-hidden {
+            display: none;
+        }
+
+        .custom-hundred-toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 2px 0 10px;
+            flex-wrap: wrap;
+        }
+
+        .custom-hundred-toggle-row .is-hidden {
+            display: none;
+        }
+
+        .custom-add-flavor-btn {
+            border: 1px dashed #cbb6a0;
+            background: #fff;
+            color: #7c332a;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .custom-add-flavor-btn:hover {
+            background: #fff7f1;
+            transform: translateY(-1px);
+        }
+
+        .custom-remove-flavor-btn {
+            border-style: solid;
+            border-color: #dec8b4;
+            color: #6b5a4f;
+        }
+
+        .custom-hundred-row select {
+            border: 1px solid #d7ccc2;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            background: #fff;
+        }
+
+        .custom-hundred-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 14px 0;
+            background: #fff;
+            border: 1px dashed #d9c4ae;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
+        .custom-hundred-message {
+            min-height: 20px;
+            margin: 0 0 12px;
+            font-size: 0.9rem;
+            color: #8c3124;
+        }
+
+        .custom-hundred-message.success {
+            color: #1e7a46;
+        }
+
+        .custom-hundred-submit-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.96rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(90deg, #b35d6e, #ce7e61);
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(179, 93, 110, 0.25);
+            transition: transform 0.15s ease, opacity 0.2s ease;
+        }
+
+        .custom-hundred-submit-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .custom-hundred-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }

@@ -1,0 +1,26 @@
+:root {
+    --primary-pink: #b35d6e; 
+    --bg-dark: #121212;     
+    --card-bg: #1e1e1e;
+    --text-gold: #d4af37;
+    --trend-green: #00ff88;
+}
+
+.crm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    background: var(--bg-dark);
+    padding: 30px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+}
+
+.trend { color: var(--trend-green); font-size: 0.8rem; }
+.value { font-size: 2.5rem; font-weight: bold; color: var(--primary-pink); }

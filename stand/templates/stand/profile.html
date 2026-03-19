@@ -1,0 +1,213 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Perfil - Arte & Sabor</title>
+
+    <link rel="stylesheet" href="{% static 'css/stand/main.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/header.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'css/stand/global.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/stand/profile.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    {% include 'stand/header.html' %}
+
+    
+
+    <div class="perfil-container">
+
+        <aside class="perfil-sidebar">
+
+            <div class="user-avatar">
+
+                <div class="avatar-circle">
+
+                    {% if request.user.name %}{{ request.user.name|first|upper }}{% else %}{{ request.user.username|first|upper }}{% endif %}
+
+                </div>
+
+                <h3>{% if request.user.name %}{{ request.user.name }}{% else %}{{ request.user.username }}{% endif %}</h3>
+
+                <p>Cliente desde {{ request.user.date_joined|date:"M Y" }}</p>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="{% url 'stand:profile' %}" class="active">👤 Meus Dados</a>
+
+                <a href="{% url 'stand:profile_addresses' %}">📍 Endereços</a>
+
+                <hr>
+
+                <a href="{% url 'stand:logout' %}" class="logout-link">Sair</a>
+
+            </nav>
+
+        </aside>
+
+
+
+        <main class="perfil-content">
+
+            <section class="perfil-section">
+
+                <h2>Informações Pessoais</h2>
+
+                
+
+                {% if messages %}
+
+                <div class="messages" style="margin-bottom: 20px;">
+
+                    {% for message in messages %}
+
+                        <div style="padding: 10px; border-radius: 5px; {% if message.tags == 'success' %}background-color: #d4edda; color: #3c763d; border: 1px solid #c3e6cb;{% else %}background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% endif %}">
+
+                            {{ message }}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+
+
+                <form method="post" action="{% url 'stand:profile' %}" class="perfil-form">
+
+                    {% csrf_token %}
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label>Nome Completo</label>
+
+                            <input type="text" name="name" value="{% if request.user.name %}{{ request.user.name }}{% else %}{{ request.user.get_full_name }}{% endif %}">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>E-mail</label>
+
+                            <input type="email" value="{{ request.user.email }}" readonly style="background-color: #f4f4f4; cursor: not-allowed;" title="O e-mail não pode ser alterado">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label>Telefone</label>
+
+                            <input type="text" name="phone" placeholder="(00) 00000-0000" value="{{ request.user.phone|default:'' }}">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Data de Nascimento</label>
+
+                            <input type="date" name="birth_date" value="{{ request.user.birth_date|date:'Y-m-d'|default:'' }}">
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="save-btn">Atualizar Dados</button>
+
+                </form>
+
+            </section>
+
+
+
+            <section class="perfil-section">
+
+                <h2>Últimos Pedidos</h2>
+
+                <div class="pedidos-lista">
+
+                    {% if orders %}
+
+                        {% for order in orders %}
+
+                        <div class="pedido-card mb-3" style="border: 1px solid #efeae2; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background-color: #faf8f5;">
+
+                            <div class="pedido-info">
+
+                                <span class="pedido-numero" style="font-weight: 600; color: #b35d6e; display: block;">#{{ order.id|stringformat:"s"|slice:":8" }}</span>
+
+                                <span class="pedido-data" style="font-size: 0.9em; color: #777;">{{ order.created_at|date:"d/m/Y - H:i" }}</span>
+
+                            </div>
+
+                            <div class="pedido-status 
+
+                                {% if order.status == 'delivered' %}status-concluido
+
+                                {% elif order.status == 'canceled' %}status-cancelado
+
+                                {% else %}status-pendente{% endif %}"
+
+                                style="padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: 600;
+
+                                {% if order.status == 'delivered' %}background: #d4edda; color: #155724;
+
+                                {% elif order.status == 'canceled' %}background: #f8d7da; color: #721c24;
+
+                                {% else %}background: #fff3cd; color: #856404;{% endif %}">
+
+                                {{ order.get_status_display }}
+
+                            </div>
+
+                            <div class="pedido-valor" style="font-weight: 600;">R$ {{ order.get_total|floatformat:2 }}</div>
+
+                            <button class="detalhes-btn" style="background: none; border: 1px solid #b35d6e; color: #b35d6e; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s;">Ver Detalhes</button>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p style="color: #777; text-align: center; padding: 20px;">Você ainda não tem nenhum pedido.</p>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+
+</body>
+
+</html>
